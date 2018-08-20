@@ -1,0 +1,21 @@
+# conda env create -f conda-environment.yml
+name: housing-analysis
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.5
+  # Analysis
+  - numpy
+  - scipy
+  # Notebook Dependencies
+  - jupyter
+  - notebook
+  # Data Wrangling and Plotting
+  - pandas
+  - bokeh
+  - plotly
+  - datefinder
+  # Web Scraping
+  - beautifulsoup4
+  - requests
