@@ -98,7 +98,7 @@ I think the data has been harvested, filtered, and plotted correctly, but there 
 
 Looking at the housing areas, we can see that over the years there has been variation within each area as to the number of lets.  The current year, 2018, looks to be smaller in most areas when compared to other years, even taking into account the lack of data for the remaining four months of this year.
 
-```{r housing_areas_all_years}
+```{r housing_areas_all_years, message=FALSE}
 
 all_years_area_plot = housing_data %>%
   group_by(area, year) %>%
@@ -111,7 +111,11 @@ all_years_area_plot = housing_data %>%
   guides(fill = guide_legend(title='Year')) +
   ylab('Number of Properties Let') +
   xlab('Geographic Area') +
-  ggtitle('Properties Let by Area')
+  ggtitle('Properties Let by Area and Year')
+
+ggsave('all_years_area_plot.png',
+       all_years_area_plot,
+       device='png')
 
 all_years_area_plot
 
@@ -119,7 +123,7 @@ all_years_area_plot
 
 If we compare only 2017 lets to 2018 the difference is more obvious.
 
-```{r housing_areas_two_years}
+```{r housing_areas_two_years, message=FALSE}
 
 two_year_area_plot = housing_data %>%
   filter(year >= 2017) %>%
@@ -133,7 +137,11 @@ two_year_area_plot = housing_data %>%
   guides(fill = guide_legend(title='Year')) +
   ylab('Number of Properties Let') +
   xlab('Geographic Area') +
-  ggtitle('Properties Let by Area')
+  ggtitle('Properties Let by Area and Year')
+
+ggsave('two_year_area_plot.png',
+       two_year_area_plot,
+       device='png')
 
 two_year_area_plot
 
@@ -141,7 +149,7 @@ two_year_area_plot
 
 On the above theme of 2018 appearing to have fewer lets than previous years, if we look at the timeseries of lets aggregated to the month level we can see there is not much of a pattern. I thought potentially a large amount of lets may become availabe towards the end of previous years to explain the 2018 behaviour shown in previous plots but this is not the case.
 
-```{r housing_areas_timeseries}
+```{r housing_areas_timeseries, message=FALSE}
 
 timeseries_area_plot = housing_data %>%
   group_by(year, month) %>%
@@ -152,7 +160,7 @@ timeseries_area_plot = housing_data %>%
   guides(color = guide_legend(title='Year')) +
   xlab('Month') +
   ylab("Number of Properties Let") +
-  ggtitle('Properties Let by Year') +
+  ggtitle('Properties Let by Month and Year') +
   scale_x_continuous(breaks = 1:12,
     labels = paste0(c('1',
                       '2',
@@ -167,12 +175,16 @@ timeseries_area_plot = housing_data %>%
                       '11',
                       '12')))
 
+ggsave('timeseries_area_plot.png',
+       timeseries_area_plot,
+       device='png')
+
 timeseries_area_plot  
 ```
 
 Another point of interest with 2017/2018 data is to look at the ratio of bids to lets.  While the ratios are mostly higher in 2018, they're not as different as expected when the reduced number of properties to bid on is taken into account.  The most salient point appears to be that a lot of people wanted to live in Newton this year.
 
-```{r housing_areas_two_year_ratio}
+```{r housing_areas_two_year_ratio, message=FALSE}
 
 two_year_bid_let_ratio = housing_data %>%
   filter(year >= 2017) %>%
@@ -188,7 +200,11 @@ two_year_bid_let_ratio = housing_data %>%
   guides(fill = guide_legend(title='Year')) +
   ylab('Ratio of Bids per Let') +
   xlab('Geographic Area') +
-  ggtitle('Ratio of Bids per Let')
+  ggtitle('Ratio of Bids per Let  by Area and Year')
+
+ggsave('two_year_bid_let_ratio.png',
+       two_year_bid_let_ratio,
+       device='png')
 
 two_year_bid_let_ratio
 ```
@@ -197,7 +213,7 @@ two_year_bid_let_ratio
 
 Looking at the bands we see the difference in lets over the years in an easier form to digest.
 
-```{r housing_band_annual_summary}
+```{r housing_band_annual_summary, message=FALSE}
 
 all_years_band_plot = housing_data %>%
   group_by(band, year) %>%
@@ -209,7 +225,11 @@ all_years_band_plot = housing_data %>%
   guides(fill = guide_legend(title='Year')) +
   xlab('Property Band') +
   ylab('Number of Properties Let') +
-  ggtitle('Properties Let by Band')
+  ggtitle('Properties Let by Band and Year')
+
+ggsave('all_years_band_plot.png',
+       all_years_band_plot,
+       device='png')
 
 all_years_band_plot
 
@@ -217,9 +237,9 @@ all_years_band_plot
 
 Looking at the ratios of bids per let, we can see C and D bid ratios increasing as well as A, but B and E is less.
 
-```{r housing_band_annual_ratio}
+```{r housing_band_annual_ratio, message=FALSE}
 
-all_years_band_plot = housing_data %>%
+all_years_band_ratio_plot = housing_data %>%
   group_by(band, year) %>%
   summarize(num_lets = n(),
             num_bids = sum(bids)) %>%
@@ -231,9 +251,13 @@ all_years_band_plot = housing_data %>%
   guides(fill = guide_legend(title='Year')) +
   xlab('Property Band') +
   ylab('Ratio of Bids per Let') +
-  ggtitle('Ratio of Bids per Let')
+  ggtitle('Ratio of Bids per Let by Band and Year')
 
-all_years_band_plot
+ggsave('all_years_band_ratio_plot.png',
+       all_years_band_ratio_plot,
+       device='png')
+
+all_years_band_ratio_plot
 
 ```
 
@@ -241,7 +265,7 @@ all_years_band_plot
 
 Looking to the number of lets by bedroom shows that there has been a similar amount of one bedroom and two bedroom lets.  This suprised me as I had assumed two bedroom properties is the default for most builds, and so would be the largest by far.
 
-```{r housing_bedroom_annual_summary}
+```{r housing_bedroom_annual_summary, message=FALSE}
 
 all_years_bedroom_plot = housing_data %>%
   group_by(bedrooms, year) %>%
@@ -253,7 +277,11 @@ all_years_bedroom_plot = housing_data %>%
   guides(fill = guide_legend(title='Year')) +
   xlab('Number of Bedrooms') +
   ylab('Number of Properties Let') +
-  ggtitle('Properties Let by Bedroom Amount')
+  ggtitle('Properties Let by Number of Bedrooms and Year')
+
+ggsave('all_years_bedroom_plot.png',
+       all_years_bedroom_plot,
+       device='png')
 
 all_years_bedroom_plot
 
@@ -261,9 +289,9 @@ all_years_bedroom_plot
 
 The ratio of bids to lets by bedroom shows that the demand for single bedroom properties is the higest, descending as the number of rooms increases.
 
-```{r housing_bedroom_annual_ratio}
+```{r housing_bedroom_annual_ratio, message=FALSE}
 
-all_years_bedroom_plot = housing_data %>%
+all_years_bedroom_ratio_plot = housing_data %>%
   group_by(bedrooms, year) %>%
   summarize(num_lets = n(),
             num_bids = sum(bids)) %>%
@@ -275,9 +303,13 @@ all_years_bedroom_plot = housing_data %>%
   guides(fill = guide_legend(title='Year')) +
   xlab('Number of Bedrooms') +
   ylab('Ratio of Bids per Let') +
-  ggtitle('Ratio of Bids per Let')
+  ggtitle('Ratio of Bids per Let by Number of Bedrooms and Year')
 
-all_years_bedroom_plot
+ggsave('all_years_bedroom_ratio_plot.png',
+       all_years_bedroom_ratio_plot,
+       device='png')
+
+all_years_bedroom_ratio_plot
 
 ```
 
@@ -288,14 +320,14 @@ I'm not happy with having different breaks on the x-axis for the number of lets 
 
 ### Band C
 
-```{r targeted_eda_summary_c}
+```{r targeted_eda_summary_c, message=FALSE}
 
 targeted_data = housing_data %>%
   filter(year >= 2017) %>%
   filter(bedrooms == 1) %>%
   filter(band %in% c('Band C'))
 
-targeted_areas_summary = targeted_data %>%
+targeted_areas_summary_c = targeted_data %>%
   group_by(area, year) %>%
   summarize(num_lets = n(),
             num_bids = sum(bids)) %>%
@@ -313,25 +345,29 @@ targeted_areas_summary = targeted_data %>%
   scale_fill_viridis_d() +
   xlab('Geographic Area') +
   ylab('Number of lets ~ Bid to Let Ratio') +
-  ggtitle('Properties Let and Bid Ratio by Area, Year, Band') +
+  ggtitle('Band C Properties Let and Bid Ratio by Area, Year') +
   facet_grid(year ~ stat_type, scales="free_x") +
   guides(fill=FALSE)
 
-targeted_areas_summary
+ggsave('targeted_areas_summary_c.png',
+       targeted_areas_summary_c,
+       device='png')
+
+targeted_areas_summary_c
 
 ```
 
 ### Band D
 
 
-```{r targeted_eda_summary_d}
+```{r targeted_eda_summary_d, message=FALSE}
 
 targeted_data = housing_data %>%
   filter(year >= 2017) %>%
   filter(bedrooms == 1) %>%
   filter(band %in% c('Band D'))
 
-targeted_areas_summary = targeted_data %>%
+targeted_areas_summary_d = targeted_data %>%
   group_by(area, year) %>%
   summarize(num_lets = n(),
             num_bids = sum(bids)) %>%
@@ -349,10 +385,14 @@ targeted_areas_summary = targeted_data %>%
   scale_fill_viridis_d() +
   xlab('Geographic Area') +
   ylab('Number of lets ~ Bid to Let Ratio') +
-  ggtitle('Properties Let and Bid Ratio by Area, Year, Band') +
+  ggtitle('Band D Properties Let and Bid Ratio by Area, Year') +
   facet_grid(year ~ stat_type, scales="free_x") +
   guides(fill=FALSE)
 
-targeted_areas_summary
+ggsave('targeted_areas_summary_d.png',
+       targeted_areas_summary_d,
+       device='png')
+
+targeted_areas_summary_d
 
 ```
