@@ -98,10 +98,14 @@ The ratio of bids to lets by bedroom shows that the demand for single bedroom pr
 
 ![](Lancaster_Social_Housing_Analysis_files/figure-markdown_github/housing_bedroom_properties_ratio-1.png)
 
-Recent One-Bedroom, Band C & D Lets
------------------------------------
+Recent One-Bedroom, Band B, C, & D Lets
+---------------------------------------
 
 I'm not happy with having different breaks on the x-axis for the number of lets and bid ratio between the two plots, but the facet\_grid command needs the free\_x axis so that the two different types of data can have their own axis. When I get time I'll see if I can dictate two different sets of breaks for each facet.
+
+### Band B
+
+![](Lancaster_Social_Housing_Analysis_files/figure-markdown_github/band_b_lets_and_ratio-1.png)
 
 ### Band C
 
@@ -120,6 +124,6 @@ Plotting the average delay between an application being made, and a bid being wo
 
 ![](Lancaster_Social_Housing_Analysis_files/figure-markdown_github/average_delay_to_let-1.png)
 
-In the plot above what isn't captured is how variable the delays are, and so lastly I want to use some boxplots to look at the same data, but this time for only band C and D properties, with one bedroom. The first uses all the data, while the second removes data with delay greater than 1000 days.
+In the plot above what isn't captured is how variable the delays are, and so lastly I want to use some boxplots to look at the same data, but this time for only band B, C, and D properties, with one bedroom. The first uses all the data, while the second removes data with delay greater than 1000 days.
 
-![](Lancaster_Social_Housing_Analysis_files/figure-markdown_github/average_delay_one_bed_cd-1.png)![](Lancaster_Social_Housing_Analysis_files/figure-markdown_github/average_delay_one_bed_cd-2.png)
+![](Lancaster_Social_Housing_Analysis_files/figure-markdown_github/average_delay_one_bed_bcd-1.png)![](Lancaster_Social_Housing_Analysis_files/figure-markdown_github/average_delay_one_bed_bcd-2.png)

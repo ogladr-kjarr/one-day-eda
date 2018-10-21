@@ -366,9 +366,61 @@ housing_bedroom_properties_ratio
 ```
 
 
-## Recent One-Bedroom, Band C & D Lets
+## Recent One-Bedroom, Band B, C, & D Lets
 
 I'm not happy with having different breaks on the x-axis for the number of lets and bid ratio between the two plots, but the facet_grid command needs the free_x axis so that the two different types of data can have their own axis.  When I get time I'll see if I can dictate two different sets of breaks for each facet.
+
+### Band B
+
+```{r band_b_lets_and_ratio, message=FALSE}
+
+band_b_lets_and_ratio = housing_data %>%
+  filter(
+    year >= 2017,
+    bedrooms == 1,
+    band %in% c( 'Band B' )
+  ) %>% 
+  group_by( area, year ) %>%
+  summarize(
+    num_lets = n(),
+    num_bids = sum( bids ) 
+  ) %>%
+  mutate(
+    'Bid Ratio' = num_bids / num_lets,
+    'Number of Lets' = num_lets
+  ) %>%
+  select(
+    -num_bids, 
+    -num_lets
+  ) %>%
+  gather( stat_type, value, -area, -year ) %>%
+  mutate(
+    stat_type = factor(
+      stat_type,
+      ordered = TRUE,
+      levels = c('Number of Lets', 'Bid Ratio'))
+  ) %>%
+  
+  ggplot( aes( x = fct_rev( area ), y = value, fill = stat_type ) ) +
+    geom_bar( stat = 'identity' ) +
+    coord_flip() +
+    scale_y_continuous( labels = scales::comma ) +
+    scale_fill_viridis_d() +
+    xlab( 'Geographic Area' ) +
+    ylab( 'Number of lets ~ Bid to Let Ratio' ) +
+    ggtitle( 'Band B Properties Let and Bid Ratio by Area, Year' ) +
+    facet_grid( year ~ stat_type, scales = "free_x" ) +
+    guides( fill = FALSE )
+
+ggsave(
+  '09_band_b_lets_and_ratio.png',
+  band_b_lets_and_ratio,
+  device='png'
+)
+
+band_b_lets_and_ratio
+
+```
 
 ### Band C
 
@@ -514,11 +566,11 @@ average_delay_to_let
 
 ```
 
-In the plot above what isn't captured is how variable the delays are, and so lastly I want to use some boxplots to look at the same data, but this time for only band C and D properties, with one bedroom.  The first uses all the data, while the second removes data with delay greater than 1000 days.
+In the plot above what isn't captured is how variable the delays are, and so lastly I want to use some boxplots to look at the same data, but this time for only band B, C, and D properties, with one bedroom.  The first uses all the data, while the second removes data with delay greater than 1000 days.
 
-```{r average_delay_one_bed_cd}
+```{r average_delay_one_bed_bcd}
 
-average_delay_one_bed_cd <- housing_data %>%
+average_delay_one_bed_bcd <- housing_data %>%
   mutate(
     delay = date - effective_date,
     year = year( date )
@@ -526,7 +578,7 @@ average_delay_one_bed_cd <- housing_data %>%
   filter(
     bedrooms == 1,
     year %in% c( 2017, 2018 ),
-    band %in% c( 'Band C', 'Band D' ) 
+    band %in% c( 'Band B', 'Band C', 'Band D' ) 
   ) %>% 
 
   ggplot( aes( band, delay )) +
@@ -538,15 +590,15 @@ average_delay_one_bed_cd <- housing_data %>%
     ggtitle( 'Delay Between Application and Let' )
 
 ggsave(
-  '12_average_delay_one_bed_cd.png',
-  average_delay_one_bed_cd,
+  '12_average_delay_one_bed_bcd.png',
+  average_delay_one_bed_bcd,
   device='png'
 )
 
-average_delay_one_bed_cd
+average_delay_one_bed_bcd
 
 
-average_delay_one_bed_cd_no_outlier <- housing_data %>%
+average_delay_one_bed_bcd_no_outlier <- housing_data %>%
   mutate(
     delay = date - effective_date,
     year = year( date )
@@ -554,7 +606,7 @@ average_delay_one_bed_cd_no_outlier <- housing_data %>%
   filter(
     bedrooms == 1,
     year %in% c( 2017, 2018 ),
-    band %in% c( 'Band C', 'Band D' ),
+    band %in% c( 'Band B', 'Band C', 'Band D' ),
     delay < days( 1000 )
   ) %>% 
 
@@ -567,11 +619,11 @@ average_delay_one_bed_cd_no_outlier <- housing_data %>%
     ggtitle( 'Delay Between Application and Let < 1000 Days' ) 
 
 ggsave(
-  '13_average_delay_one_bed_cd_no_outlier.png',
-  average_delay_one_bed_cd_no_outlier,
+  '13_average_delay_one_bed_bcd_no_outlier.png',
+  average_delay_one_bed_bcd_no_outlier,
   device='png'
 )
 
-average_delay_one_bed_cd_no_outlier
+average_delay_one_bed_bcd_no_outlier
 
 ```
